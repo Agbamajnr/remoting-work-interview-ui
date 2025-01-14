@@ -1,9 +1,9 @@
-import logo from 'assets/logo.svg'
 import DefaultLayout from 'layouts/default'
 import Tasks from 'pages/Tasks'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 function App() {
+
   return (
     <>
       <DefaultLayout>

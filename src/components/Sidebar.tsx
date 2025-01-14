@@ -1,28 +1,51 @@
-import { ChevronFirst, ChevronLast, MoreVertical, PanelLeft } from "lucide-react"
+import { PanelLeft } from "lucide-react"
 import logo from "../assets/logo.svg"
 import AvatarImg from "../assets/images/thumbs-up-guy.png"
 import { createContext, useContext, useState } from "react"
+import { useAppDispatch, useAppSelector } from "core/hooks";
+import { selectAppTheme, updateAppTheme } from "core/slicers/settingsSlice";
 
 const SidebarContext = createContext<{ expanded: boolean }>({ expanded: true });
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
     const [expanded, setExpanded] = useState(true)
+    const isDark = useAppSelector(selectAppTheme)
+    const storeDispatch = useAppDispatch()
+
+    const darkModeHandler = () => {
+        storeDispatch(updateAppTheme(!isDark ? 'dark' : 'light'))
+    }
     return (
         <>
             <aside className="h-screen">
-                <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+                <nav className="h-full flex flex-col dark:dark-background border-r shadow-sm">
                     <div className="p-4 pb-2 flex justify-between items-center">
-                        {expanded ?
-                            <div className="flex flex-row gap-x-2 pl-1.5">
-                                <img src={logo} className={`overflow-hidden transition-all w-6`} />
-                                <span className="text-lg text-indigo-800">TASKIFY</span>
-                            </div>
-                            : null
+                        {
+                            expanded ?
+                                <div className="flex flex-row gap-x-2 pl-1.5">
+                                    <img src={logo} className={`overflow-hidden transition-all w-6`} />
+                                    <span className="text-lg text-indigo-800">TASKIFY</span>
+                                </div>
+                                : null
                         }
                         <button onClick={() => setExpanded((curr) => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
                             <PanelLeft />
                         </button>
                     </div>
+
+                    {
+                        expanded
+                            ? <div className="relative flex items-center pt-1.5 pb-3 px-6 gap-x-2 my-1 font-medium rounded-md cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5 text-indigo-600">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z" clipRule="evenodd" />
+                                </svg>
+
+                                <span className="text-indigo-600 textt-xs">Add task</span>
+
+                            </div>
+                            : null
+                    }
+
 
                     <SidebarContext.Provider value={{ expanded }}>
 
@@ -36,7 +59,20 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                                 <h4 className="font-semibold">constGenius</h4>
                                 <span className="text-xs text-gray-600">constgenius@gmail.com</span>
                             </div>
-                            <MoreVertical size={20} />
+
+                            <button onClick={() => darkModeHandler()} className="transition-all">
+                                {
+                                    isDark
+                                        ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6">
+                                            <path fillRule="evenodd" d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z" clipRule="evenodd" />
+                                        </svg>
+                                        : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+                                        </svg>
+
+                                }
+                            </button>
+
                         </div>
                     </div>
                 </nav>
