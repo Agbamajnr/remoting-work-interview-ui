@@ -46,8 +46,8 @@ export default function EditTask({ onCancel, onTaskEdited, taskToEdit }: { onCan
             {/* form widget */}
 
             <div className="flex flex-col w-full h-full px-[20px] pb-[10px]">
-                <input value={taskName} onChange={(e) => setTaskName(e.target.value)} className="w-full text-sm font-medium rounded !outline-none pt-3 !border-none focus:outline-none focus:border-none" placeholder="What do have going on?" />
-                <input value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} className="w-full text-xs rounded !outline-none !border-none pt-2 focus:outline-none focus:border-none" placeholder="Description" />
+                <input value={taskName} onChange={(e) => setTaskName(e.target.value)} className="bg-transparent dark:text-gray-100 w-full text-sm font-medium rounded !outline-none pt-3 !border-none focus:outline-none focus:border-none" placeholder="What do have going on?" />
+                <input value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} className="bg-transparent dark:text-gray-100 w-full text-xs rounded !outline-none !border-none pt-2 focus:outline-none focus:border-none" placeholder="Description" />
 
                 <div className="flex flex-row items-center mt-4 gap-x-3">
                     <Datepicker minDate={new Date()} onChange={(date) => {
@@ -62,20 +62,20 @@ export default function EditTask({ onCancel, onTaskEdited, taskToEdit }: { onCan
                     <div className="border rounded-lg py-2 px-3 gap-x-1 flex flex-row items-center" onClick={() => setKeywordsInputOpen(!keywordsInputOpen)}>
                         {
                             keywords.length === 0
-                                ? <Tags size={14} />
-                                : <span className="text-sm font-semibold">{keywords.length}</span>
+                                ? <Tags size={14} className="dark:text-gray-200" />
+                                : <span className="text-sm font-semibold dark:text-gray-200">{keywords.length}</span>
                         }
 
-                        <span className="text-sm font-medium">Keywords</span>
+                        <span className="text-sm font-medium dark:text-gray-300">Keywords</span>
 
-                        <ChevronsLeftRight size={15} className="ml-4" />
+                        <ChevronsLeftRight size={15} className="ml-4 dark:text-gray-200" />
                     </div>
 
                     {/* keywords input box */}
                     {
                         keywordsInputOpen
                         && <div className="border rounded-lg py-2.5 px-3 gap-x-1 flex flex-row items-center">
-                            <input defaultValue={keywords.join(', ')} className="w-full h-full text-sm border-none outline-none" onChange={(e) => {
+                            <input defaultValue={keywords.join(', ')} className="w-full h-full text-sm border-none outline-none bg-transparent dark:text-gray-200" onChange={(e) => {
                                 if (e.target.value.length > 0) {
                                     setKeywords(e.target.value.trim().split(','))
                                 }

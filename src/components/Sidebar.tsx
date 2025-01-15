@@ -28,7 +28,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                             expanded ?
                                 <div className="flex flex-row gap-x-2 pl-1.5">
                                     <img src={logo} className={`overflow-hidden transition-all w-6`} />
-                                    <span className="text-lg text-indigo-800">TASKIFY</span>
+                                    <span className="text-lg text-indigo-800 dark:text-indigo-300">TASKIFY</span>
                                 </div>
                                 : null
                         }
@@ -62,14 +62,14 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                             <img src={AvatarImg} className="w-10 h-10 rounded-md" />
                             <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"} `}>
                                 <div className="leading-4">
-                                    <h4 className="font-semibold text-nowrap text-ellipsis">{activeUser?.name}</h4>
-                                    <span className="text-xs text-gray-600 text-nowrap text-ellipsis">{activeUser?.email}</span>
+                                    <h4 className="font-semibold text-nowrap text-ellipsis dark:text-gray-300">{activeUser?.name}</h4>
+                                    <span className="text-xs text-gray-500 text-nowrap text-ellipsis">{activeUser?.email}</span>
                                 </div>
 
                                 <button onClick={() => darkModeHandler()} className="transition-all">
                                     {
                                         isDark
-                                            ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6">
+                                            ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6 text-gray-300">
                                                 <path fillRule="evenodd" d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z" clipRule="evenodd" />
                                             </svg>
                                             : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">

@@ -43,13 +43,13 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
     }, [searchText])
 
     return (
-        <div className="shadow bg-white dark:bg-gray-800 rounded-lg w-[600px] z-30 h-[400px] flex flex-col items-center">
+        <div className="shadow bg-white dark:bg-gray-800 rounded-lg xl:w-[600px] lg:w-[500px] w-[350px] z-30 h-[400px] flex flex-col items-center">
             {/* search header */}
             <div className="w-full py-3 px-[20px] border-b flex items-center flex-row gap-x-2">
                 <SearchIcon size={20} />
                 <input onChange={(e) => {
                     setSearchText(e.target.value)
-                }} placeholder="Search by keywords, categories or tasks" className="outline-none border-none text-sm placeholder:text-gray-400 w-full" />
+                }} placeholder="Search by keywords, categories or tasks" className="outline-none border-none text-sm placeholder:text-gray-400 w-full bg-transparent" />
             </div>
 
             {/* all lists */}

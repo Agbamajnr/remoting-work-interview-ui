@@ -8,7 +8,7 @@ import React from 'react';
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     return (
-        <div className="layout flex flex-row dark:bg-gray-900 transition-colors relative h-screen overflow-hidden no-scroll-btn">
+        <div className="layout flex flex-row dark:bg-gray-900 transition-colors relative h-screen overflow-scroll lg:overflow-hidden no-scroll-btn">
             <MainSidebar />
             <main className='w-full'>
                 <TopHeader />

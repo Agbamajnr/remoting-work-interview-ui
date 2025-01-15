@@ -26,7 +26,7 @@ export default function TopHeader() {
                         width: calculateTaskProgress() > 0 ? `${Math.ceil(calculateTaskProgress())}%` : 0
                     }} className={`h-full rounded bg-green-600`}></div>
                 </div>
-                <span className="text-lg font-medium">{Math.ceil(calculateTaskProgress())}%</span>
+                <span className="text-lg font-medium dark:text-gray-300">{Math.ceil(calculateTaskProgress())}%</span>
             </div>
         </header>
     );
