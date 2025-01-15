@@ -78,7 +78,7 @@ pnpm run test:ui
 ```
 
 
-## Features
+## Unique Features
 - [Progress Bar]
 - [Calendar View]
 - [Dark / Light Mode Switcher]
