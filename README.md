@@ -1,6 +1,4 @@
-![reactjs-vite-tailwindcss-boilerplate](https://user-images.githubusercontent.com/16243531/217138979-b854309c-4742-4275-a705-f9fec5158217.jpg)
-
-# React Tailwindcss Boilerplate build with Vite
+# Task Management App
 
 This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.
 
@@ -17,6 +15,10 @@ This project uses many tools like:
 - [Eslint](https://eslint.org)
 - [Prettier](https://prettier.io)
 
+### Backend
+- [NodeJS](https://node.org)
+- [MongoDB](https://mongodb.org)
+
 ## Getting Started
 
 ### Install
@@ -24,7 +26,7 @@ This project uses many tools like:
 Create the project.
 
 ```bash
-pnpm dlx degit joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate my-app
+git clone https://github.com/Agbamajnr/remoting-work-interview-ui.git my-app
 ```
 
 Access the project directory.
@@ -75,6 +77,10 @@ View and interact with your tests via UI.
 pnpm run test:ui
 ```
 
-## License
 
-This project is licensed under the MIT License.
+## Features
+- [Progress Bar]
+- [Calendar View]
+- [Dark / Light Mode Switcher]
+- [User Management System]
+- [Tags/Keywords in Tasks]
