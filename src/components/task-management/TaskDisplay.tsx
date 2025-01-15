@@ -14,12 +14,6 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
     })
 
 
-    const [upcomingTasksList, setUpcomingList] = useState<Task[]>(upcomingTasks);
-
-    const onTaskDrop = (event: any) => {
-        setUpcomingList(event.list);
-    }
-
     return (
         <div className="flex w-full flex-col items-start justify-start">
             <h1 className="text-3xl font-semibold text-gray-950">{headerLabel}</h1>
@@ -33,29 +27,35 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
 
             {/* overdue list */}
             {
-                overdueTasks.length > 0
-                    ? <div className="flex flex-col items-center w-full mt-4 gap-y-2">
-                        <div className="border-b py-1 flex flex-row items-center w-full">
-                            <h3 className="text-sm font-semibold text-black">Overdue</h3>
-                        </div>
-                    </div>
-                    : null
-            }
-
-            {/* upcoming list */}
-            {
-                upcomingTasks.length > 0
-                    ? <div className="flex flex-col items-center w-full mt-6 gap-y-2">
-                        <div className="px-5 w-full">
+                headerLabel === 'Tasks'
+                    ?
+                    overdueTasks.length > 0
+                        ? <div className="flex flex-col items-center w-full mt-4 gap-y-2">
                             <div className="border-b py-1 flex flex-row items-center w-full">
-                                <h3 className="text-sm font-semibold text-black">Upcoming</h3>
+                                <h3 className="text-sm font-semibold text-black">Overdue</h3>
                             </div>
-                        </div>
 
-                        <TasksList listSource={upcomingTasksList} onDrop={onTaskDrop} />
-                    </div>
-                    : null
+                            <TasksList listSource={overdueTasks} />
+                        </div>
+                        : upcomingTasks.length > 0
+                            ? <div className="flex flex-col items-center w-full mt-6 gap-y-2">
+                                <div className="px-5 w-full">
+                                    <div className="border-b py-1 flex flex-row items-center w-full">
+                                        <h3 className="text-sm font-semibold text-black">Upcoming</h3>
+                                    </div>
+                                </div>
+
+                                <TasksList listSource={upcomingTasks} />
+                            </div>
+                            : null
+
+                    : filteredTasks.length > 0
+                        ? <div className="flex flex-col items-center w-full mt-6 gap-y-2">
+                            <TasksList listSource={filteredTasks} />
+                        </div>
+                        : null
             }
+
 
 
         </div>
@@ -63,7 +63,7 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
 }
 
 
-function TasksList({ listSource, onDrop }: { listSource: Task[], onDrop: (event: any) => void }) {
+function TasksList({ listSource }: { listSource: Task[] }) {
     return (
         <VirtualList
             className="virtual-list w-full"
@@ -72,7 +72,6 @@ function TasksList({ listSource, onDrop }: { listSource: Task[], onDrop: (event:
             dataSource={listSource}
             handle=".handle"
             direction="vertical"
-            onDrop={onDrop}
         >
             {
                 (record, index, dataKey) => {
