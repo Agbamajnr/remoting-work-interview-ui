@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'core/store'
 
-// Define a TS type for the data we'll be using
 export interface User {
     userId: string
     email: string
-    username: string
-    dateLoggedIn: string
+    name: string
+    dateLoggedIn: Date
 }
 
 export interface Setting {
@@ -22,12 +21,10 @@ export const initialState: Setting = {
     activeUser: null
 };
 
-console.log(isDefaultDarkMode)
 if (initialState.isDarkMode) {
     document.body.classList.add('dark')
 }
 
-// Create the slice and pass in the initial state
 const settingsSlice = createSlice({
     name: 'settings',
     initialState,
@@ -46,13 +43,17 @@ const settingsSlice = createSlice({
             state.activeUser = action.payload
         },
 
+        userIdUpdated(state, action: PayloadAction<string>) {
+            if (state.activeUser) state.activeUser.userId = action.payload
+        },
+
         activeUserLoggedOut(state) {
             state.activeUser = null
         }
     }
 })
 
-export const { updateActiveUser, updateAppTheme, activeUserLoggedOut } = settingsSlice.actions
+export const { updateActiveUser, updateAppTheme, activeUserLoggedOut, userIdUpdated } = settingsSlice.actions
 
 export const selectActiveUser = (state: RootState) => state.settings.activeUser
 export const selectAppTheme = (state: RootState) => state.settings.isDarkMode
