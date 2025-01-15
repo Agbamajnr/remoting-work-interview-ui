@@ -1,46 +1,43 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "core/hooks";
 import { selectActiveUser } from "core/slicers/settingsSlice";
-import { defaultTaskCategories, Task, taskAdded, TaskCategory } from "core/slicers/tasksSlice";
+import { defaultTaskCategories, Task, taskAdded, TaskCategory, taskUpdated } from "core/slicers/tasksSlice";
 import { Datepicker, Dropdown } from "flowbite-react";
 import { ChevronsLeftRight, Tags } from "lucide-react";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
-export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => void, onTaskAdded?: (newTask: Task) => void }) {
-    const activeUser = useAppSelector(selectActiveUser)
+export default function EditTask({ onCancel, onTaskEdited, taskToEdit }: { onCancel: () => void, onTaskEdited?: (editedTask: Task) => void, taskToEdit: Task }) {
+    // const activeUser = useAppSelector(selectActiveUser)
     const storeDispatch = useAppDispatch()
 
     const [keywordsInputOpen, setKeywordsInputOpen] = useState(false)
 
 
-    const [selectedCategory, setSelectedCategory] = useState<TaskCategory>(defaultTaskCategories[0])
+    const [selectedCategory, setSelectedCategory] = useState<TaskCategory>(taskToEdit.category)
 
-    const [taskDescription, setTaskDescription] = useState('')
-    const [taskName, setTaskName] = useState('')
-    const [taskDate, setTaskDate] = useState(new Date())
+    const [taskDescription, setTaskDescription] = useState(taskToEdit.taskDescription)
+    const [taskName, setTaskName] = useState(taskToEdit.taskName)
+    const [taskDate, setTaskDate] = useState(taskToEdit.deadline)
 
-    const [keywords, setKeywords] = useState<string[]>([])
-
-    const currentLocation = useLocation()
+    const [keywords, setKeywords] = useState<string[]>(taskToEdit.keywords)
 
     function handleSubmit() {
-        const newTask: Task = {
-            userId: activeUser!.userId,
-            id: nanoid(),
+        const editedTask: Task = {
+            userId: taskToEdit.userId,
+            id: taskToEdit.id,
             taskName: taskName,
             taskDescription: taskDescription,
             deadline: taskDate,
             keywords: keywords,
-            completed: currentLocation.pathname.includes('/category/completed') ? true : false,
-            createdAt: new Date(),
+            completed: taskToEdit.completed,
+            createdAt: taskToEdit.createdAt,
             category: selectedCategory
         }
 
-        storeDispatch(taskAdded(newTask))
+        storeDispatch(taskUpdated(editedTask))
 
-        if (onTaskAdded != null) {
-            onTaskAdded(newTask)
+        if (onTaskEdited != null) {
+            onTaskEdited(editedTask)
         }
     }
 
@@ -49,15 +46,15 @@ export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => voi
             {/* form widget */}
 
             <div className="flex flex-col w-full h-full px-[20px] pb-[10px]">
-                <input onChange={(e) => setTaskName(e.target.value)} className="w-full text-sm font-medium rounded !outline-none pt-3 !border-none focus:outline-none focus:border-none" placeholder="What do have going on?" />
-                <input onChange={(e) => setTaskDescription(e.target.value)} className="w-full text-xs rounded !outline-none !border-none pt-2 focus:outline-none focus:border-none" placeholder="Description" />
+                <input value={taskName} onChange={(e) => setTaskName(e.target.value)} className="w-full text-sm font-medium rounded !outline-none pt-3 !border-none focus:outline-none focus:border-none" placeholder="What do have going on?" />
+                <input value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} className="w-full text-xs rounded !outline-none !border-none pt-2 focus:outline-none focus:border-none" placeholder="Description" />
 
                 <div className="flex flex-row items-center mt-4 gap-x-3">
                     <Datepicker minDate={new Date()} onChange={(date) => {
                         if (date != null) {
                             setTaskDate(date)
                         }
-                    }} value={taskDate} theme={{
+                    }} value={new Date(taskDate)} theme={{
                         "root": {
                             'base': "relative w-fit max-w-[200px]"
                         }
@@ -78,7 +75,7 @@ export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => voi
                     {
                         keywordsInputOpen
                         && <div className="border rounded-lg py-2.5 px-3 gap-x-1 flex flex-row items-center">
-                            <input className="w-full h-full text-sm border-none outline-none" onChange={(e) => {
+                            <input defaultValue={keywords.join(', ')} className="w-full h-full text-sm border-none outline-none" onChange={(e) => {
                                 if (e.target.value.length > 0) {
                                     setKeywords(e.target.value.trim().split(','))
                                 }
@@ -108,7 +105,7 @@ export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => voi
                     <button onClick={handleSubmit} disabled={taskName.length < 2}
                         className={`${taskName.length > 2 ? "bg-[#3062a3]" : "bg-[#a5ccff]"} text-white px-8 py-2 rounded`}
                     >
-                        Add task
+                        Save
                     </button>
                 </div>
             </div>

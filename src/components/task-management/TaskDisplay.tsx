@@ -1,8 +1,13 @@
-import { Task } from "core/slicers/tasksSlice";
+import { useAppDispatch } from "core/hooks";
+import { Task, taskCompletionUpdate, taskDeleted } from "core/slicers/tasksSlice";
 import { format, toDate } from "date-fns";
-import { Calendar, CircleCheckBig, GripVertical } from "lucide-react";
+import { Checkbox } from "flowbite-react";
+import { Calendar, CircleCheckBig, GripVertical, PencilLine, Plus, Trash } from "lucide-react";
 import { CSSProperties, useState } from "react";
 import VirtualList from 'react-virtual-drag-list';
+import EditTask from "./EditTask";
+import AddTask from "./AddTask";
+import 'assets/css/index.css'
 
 export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabel: string, filteredTasks: Task[] }) {
 
@@ -13,9 +18,11 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
         return toDate(format(task.deadline, 'MM/dd/yyyy')) >= toDate(format(new Date(), 'MM/dd/yyyy'));
     })
 
+    const [addTaskModalOpen, setAddTaskModalState] = useState(false)
+
 
     return (
-        <div className="flex w-full flex-col items-start justify-start">
+        <div className="flex w-full flex-col items-start justify-start overflow-scroll pb-4 no-scroll-btn">
             <h1 className="text-3xl font-semibold text-gray-950">{headerLabel}</h1>
             <div className="flex flex-row items-center mt-1.5 gap-x-1">
                 <CircleCheckBig size={14} color="#d1d5db" />
@@ -25,7 +32,6 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
 
             {/* list */}
 
-            {/* overdue list */}
             {
                 headerLabel === 'Tasks'
                     ?
@@ -55,6 +61,21 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
                         </div>
                         : null
             }
+            {
+                !addTaskModalOpen
+                    ? <div className="w-full flex flex-row items-center gap-x-3 cursor-pointer mt-4" onClick={() => setAddTaskModalState(true)}>
+                        <Plus size={20} />
+                        <span className="text-gray-500 text-sm hover:text-indigo-500">Add task</span>
+                    </div>
+                    : <div className="w-full h-fit py-2 flex flex-row justify-center">
+                        <div className="w-[90%] border rounded-lg">
+                            <AddTask onCancel={() => setAddTaskModalState(false)} onTaskAdded={() => setAddTaskModalState(false)} />
+                        </div>
+                    </div>
+            }
+
+
+
 
 
 
@@ -64,6 +85,8 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
 
 
 function TasksList({ listSource }: { listSource: Task[] }) {
+    const storeDispatch = useAppDispatch()
+    const [editBoxesOpen, setEditBoxesOpen] = useState<string[]>([])
     return (
         <VirtualList
             className="virtual-list w-full"
@@ -75,29 +98,61 @@ function TasksList({ listSource }: { listSource: Task[] }) {
         >
             {
                 (record, index, dataKey) => {
+
                     return (
-                        <div className="flex flex-row items-start w-full h-fit gap-x-2 py-3">
-                            <GripVertical size={20} className="handle cursor-grabbing" />
-                            <div className=" border-b w-full flex flex-row justify-between items-start h-full">
-                                <div className="details flex flex-col items-start gap-y-1 pb-1">
-                                    <h2 className="text-sm font-medium">{record.taskName}</h2>
-                                    {
-                                        record.taskDescription.length > 0
-                                            ? <h4 className="text-xs text-gray-400 font-medium">{record.taskDescription}</h4>
-                                            : null
-                                    }
+                        !editBoxesOpen.includes(record.id)
+                            ? <div className="flex flex-row items-start w-full h-fit gap-x-2 py-3" id={record.id}>
+                                <GripVertical size={20} className="handle cursor-grabbing" />
+                                <Checkbox className="rounded-full cursor-pointer" checked={record.completed} onChange={(e) => {
+                                    storeDispatch(taskCompletionUpdate({ taskId: record.id, status: e.currentTarget.checked }))
 
-                                    <div className="border rounded-lg py-1.5 px-3 gap-x-1 flex flex-row items-center mt-2">
-                                        <Calendar size={15} />
+                                }} />
+                                <div className=" border-b w-full flex flex-row justify-between items-start h-full">
+                                    <div className="details flex flex-col items-start gap-y-1 pb-1">
+                                        <h2 className="text-sm font-medium">{record.taskName}</h2>
+                                        {
+                                            record.taskDescription.length > 0
+                                                ? <h4 className="text-xs text-gray-400 font-medium">{record.taskDescription}</h4>
+                                                : null
+                                        }
 
-                                        <span className="text-sm font-medium">{format(record.deadline, 'MMM dd')}</span>
+                                        <div className="border rounded-lg py-1.5 px-3 gap-x-1 flex flex-row items-center mt-2">
+                                            <Calendar size={15} />
+
+                                            <span className="text-sm font-medium">{format(record.deadline, 'MMM dd')}</span>
+                                        </div>
+
                                     </div>
 
+                                    <div className="options flex flex-row items-center space-x-3">
+                                        <div className="rounded-lg p-1 hover:bg-neutral-300 cursor-pointer" onClick={() => {
+                                            setEditBoxesOpen((value) => {
+                                                return [...value, record.id]
+                                            })
+                                        }}>
+                                            <PencilLine size={20} />
+                                        </div>
+                                        <div className="rounded-lg p-1 hover:bg-neutral-300 cursor-pointer" onClick={() => {
+                                            storeDispatch(taskDeleted({ taskId: record.id }))
+                                        }}>
+                                            <Trash size={20} />
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div className="option flex flex-row"></div>
                             </div>
-                        </div>
+                            : <div className="w-full h-fit py-2 flex flex-row justify-center">
+                                <div className="w-[90%] border rounded-lg">
+                                    <EditTask onCancel={() => setEditBoxesOpen((value) => {
+                                        return value.filter(v => {
+                                            return v !== record.id
+                                        })
+                                    })} onTaskEdited={() => setEditBoxesOpen((value) => {
+                                        return value.filter(v => {
+                                            return v !== record.id
+                                        })
+                                    })} taskToEdit={record} />
+                                </div>
+                            </div>
                     )
                 }
             }

@@ -5,6 +5,7 @@ import UpcomingIcon from '/src/assets/icons/sidebar-upcoming-icon.png'
 import WorkIcon from '/src/assets/icons/sidebar-work-icon.png'
 import PersonalIcon from '/src/assets/icons/sidebar-personal-icon.png'
 import CompletedIcon from '/src/assets/icons/sidebar-completed-icon.png'
+import { stat } from 'fs'
 
 export interface Task {
     userId: string
@@ -61,6 +62,12 @@ const tasksSlice = createSlice({
         taskAdded(state, action: PayloadAction<Task>) {
             state.push(action.payload)
         },
+        taskDeleted(state, action: PayloadAction<{ taskId: string }>) {
+            const existingTask = state.find(task => task.id === action.payload.taskId)
+            if (existingTask) {
+                state.splice(state.indexOf(existingTask), 1)
+            }
+        },
 
         taskUpdated(state, action: PayloadAction<Task>) {
             const { id, taskName, taskDescription, category, keywords, deadline } = action.payload
@@ -83,7 +90,7 @@ const tasksSlice = createSlice({
     }
 })
 
-export const { taskAdded, taskCompletionUpdate, taskIdUpdated, taskUpdated } = tasksSlice.actions
+export const { taskAdded, taskCompletionUpdate, taskIdUpdated, taskUpdated, taskDeleted } = tasksSlice.actions
 
 export const selectAllTasks = (state: RootState) => state.tasks
 export const selectTaskById = (state: RootState, id: string) => state.tasks.find(task => task.id === id)

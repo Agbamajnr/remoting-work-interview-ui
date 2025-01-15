@@ -9,7 +9,7 @@ const Tasks: React.FC = () => {
 
     return (
         <>
-            <div className='flex flex-col w-full items-center h-full'>
+            <div className='flex flex-col w-full items-center h-fit'>
                 <div className="flex flex-col w-[60%] items-center h-full pt-4">
                     <TaskDisplay headerLabel={'Tasks'} filteredTasks={allTasks} />
                 </div>
