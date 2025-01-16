@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:3333/api/v1/task'
+export const BASE_URL = 'https://strategic-giralda-onedev-9e94e292.koyeb.app/api/v1/task'
