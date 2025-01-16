@@ -1,6 +1,5 @@
 # Task Management App
 
-This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.
 
 ## What is inside?
 
