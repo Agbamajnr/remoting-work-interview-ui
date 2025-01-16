@@ -7,8 +7,7 @@ import { ChevronsLeftRight, Tags } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from 'axios'
-
-const BASE_URL = 'http://localhost:3333/api/v1/task'
+import { BASE_URL } from "constants/lib";
 
 
 export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => void, onTaskAdded?: (newTask: Task) => void }) {

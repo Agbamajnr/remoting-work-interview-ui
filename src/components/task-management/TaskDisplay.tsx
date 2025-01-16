@@ -10,9 +10,7 @@ import AddTask from "./AddTask";
 import 'assets/css/index.css'
 
 import axios from 'axios'
-
-const BASE_URL = 'http://localhost:3333/api/v1/task'
-
+import { BASE_URL } from "constants/lib";
 export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabel: string, filteredTasks: Task[] }) {
 
     const overdueTasks = filteredTasks.filter(task => {
