@@ -1,11 +1,15 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "core/hooks";
 import { selectActiveUser } from "core/slicers/settingsSlice";
-import { defaultTaskCategories, Task, taskAdded, TaskCategory } from "core/slicers/tasksSlice";
+import { defaultTaskCategories, Task, taskAdded, TaskCategory, taskIdUpdated } from "core/slicers/tasksSlice";
 import { Datepicker, Dropdown } from "flowbite-react";
 import { ChevronsLeftRight, Tags } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from 'axios'
+
+const BASE_URL = 'http://localhost:3333/api/v1/task'
+
 
 export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => void, onTaskAdded?: (newTask: Task) => void }) {
     const activeUser = useAppSelector(selectActiveUser)
@@ -24,6 +28,25 @@ export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => voi
 
     const currentLocation = useLocation()
 
+
+    const createTasksOnServer = async (task: Task) => {
+        try {
+            const response = await axios.post(BASE_URL, {
+                ...task,
+                localId: task.id
+            })
+
+            const data = response.data;
+
+            storeDispatch(taskIdUpdated({ localId: task.id, serverId: data.data._id }))
+
+            return response;
+        } catch (error) {
+            return error;
+        }
+    }
+
+
     function handleSubmit() {
         const newTask: Task = {
             userId: activeUser!.userId,
@@ -39,10 +62,14 @@ export default function AddTask({ onCancel, onTaskAdded }: { onCancel: () => voi
 
         storeDispatch(taskAdded(newTask))
 
+        createTasksOnServer(newTask)
+
         if (onTaskAdded != null) {
             onTaskAdded(newTask)
         }
     }
+
+
 
     return (
         <div className="flex h-full flex-col w-full divide-y justify-between">

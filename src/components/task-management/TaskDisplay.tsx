@@ -9,6 +9,10 @@ import EditTask from "./EditTask";
 import AddTask from "./AddTask";
 import 'assets/css/index.css'
 
+import axios from 'axios'
+
+const BASE_URL = 'http://localhost:3333/api/v1/task'
+
 export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabel: string, filteredTasks: Task[] }) {
 
     const overdueTasks = filteredTasks.filter(task => {
@@ -87,6 +91,17 @@ export default function TaskDisplay({ headerLabel, filteredTasks }: { headerLabe
 function TasksList({ listSource }: { listSource: Task[] }) {
     const storeDispatch = useAppDispatch()
     const [editBoxesOpen, setEditBoxesOpen] = useState<string[]>([])
+
+    const deleteTaskOnServer = async (taskId: string) => {
+        try {
+            const response = await axios.delete(BASE_URL + `/${taskId}`)
+            return response;
+        } catch (error) {
+            return error;
+        }
+    }
+
+
     return (
         <VirtualList
             className="virtual-list w-full"
@@ -133,6 +148,7 @@ function TasksList({ listSource }: { listSource: Task[] }) {
                                             <PencilLine size={20} className="dark:text-gray-200" />
                                         </div>
                                         <div className="rounded-lg p-1 hover:bg-neutral-300 dark:hover:bg-slate-500 cursor-pointer" onClick={() => {
+                                            deleteTaskOnServer(record.id)
                                             storeDispatch(taskDeleted({ taskId: record.id }))
                                         }}>
                                             <Trash size={20} className="dark:text-gray-200" />

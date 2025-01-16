@@ -16,7 +16,7 @@ This project uses many tools like:
 - [Prettier](https://prettier.io)
 
 ### Backend
-- [NodeJS](https://node.org)
+- [NestJS](https://node.org)
 - [MongoDB](https://mongodb.org)
 
 ## Getting Started

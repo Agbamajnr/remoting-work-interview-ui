@@ -5,7 +5,7 @@ import UpcomingIcon from '/src/assets/icons/sidebar-upcoming-icon.png'
 import WorkIcon from '/src/assets/icons/sidebar-work-icon.png'
 import PersonalIcon from '/src/assets/icons/sidebar-personal-icon.png'
 import CompletedIcon from '/src/assets/icons/sidebar-completed-icon.png'
-import { stat } from 'fs'
+
 
 export interface Task {
     userId: string
@@ -51,7 +51,6 @@ export const defaultFilterCategories: TaskCategory[] = [
         icon: CompletedIcon
     },
 ]
-
 
 export const initialState: Task[] = []
 

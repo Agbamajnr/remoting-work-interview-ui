@@ -15,7 +15,7 @@ export default function MainSidebar() {
     const allTasks = useAppSelector(selectAllTasks);
 
 
-    const [searchModalOpen, setSearchModalOpen] = useState(true)
+    const [searchModalOpen, setSearchModalOpen] = useState(false)
 
 
     return (
